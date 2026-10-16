@@ -1,0 +1,25 @@
+name: Validate documentation and example
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements.txt -r requirements-docs.txt
+      - run: python examples/quickstart.py
+      - run: python tools/site_assets.py --check
+      - run: python -m mkdocs build --strict
+      - run: python tools/check_site.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hefs-static-site
+          path: site/

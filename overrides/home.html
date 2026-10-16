@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+{% block content %}{{ page.content }}{% endblock %}
+{% block tabs %}
+{{ super() }}
+<section class="hefs-hero" aria-labelledby="hero-title">
+  <div class="md-grid hefs-hero-grid">
+    <div>
+      <p class="eyebrow">DIGITAL SIGNAL PROCESSING · VOL. 168 · 2026</p>
+      <h1 id="hero-title">HEFS<span>Give complementary<br>features a voice.</span></h1>
+      <p class="paper-title">Hierarchical ensemble-based feature selection<br class="desktop-break"> for time series prediction</p>
+      <p class="authors">Huseyin Karaca · Aysin Tumay<br>Ali Taha Koc · Suleyman Serdar Kozat</p>
+      <p class="affiliation">Bilkent University</p>
+      <p class="hero-summary">Start with the strongest features. Let the others learn how to refine the forecast. A hierarchy of models connects them through explicit cost optimization.</p>
+      <div class="actions">
+        <a class="button primary" href="https://doi.org/10.1016/j.dsp.2025.105528">Read the paper ↗</a>
+        <a class="button" href="https://github.com/huseyin-karaca/hierarchical-feature-selection">Code</a>
+        <a class="button" href="{{ 'reproduce/' | url }}">Quickstart</a>
+      </div>
+    </div>
+    <figure class="hero-figure">
+      <img src="{{ 'assets/overview.svg' | url }}" width="600" height="550" alt="Dominant features feed a first predictor. Complementary features and its prediction feed a second model, which learns a relative correction. The final prediction multiplies the initial prediction by one plus the correction.">
+      <figcaption>Two feature groups. One progressively refined prediction.</figcaption>
+    </figure>
+  </div>
+</section>
+{% endblock %}
+
