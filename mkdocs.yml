@@ -1,8 +1,8 @@
 site_name: HEFS
 site_description: Hierarchical ensemble-based feature selection for time series prediction. Learn how complementary features refine forecasts through learned multiplicative corrections.
 site_url: https://hkaraca.com/hefs/
-repo_url: https://github.com/huseyin-karaca/hierarchical-feature-selection
-repo_name: huseyin-karaca/hierarchical-feature-selection
+repo_url: https://github.com/huseyin-karaca/hefs
+repo_name: huseyin-karaca/hefs
 theme:
   name: material
   custom_dir: overrides
