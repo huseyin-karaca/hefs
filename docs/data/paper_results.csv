@@ -1,0 +1,11 @@
+model,synthetic_error,m4_error,weather_error,synthetic_seconds,m4_seconds,weather_seconds
+Filter,1.023,0.105,0.0123,0.316,1.763,6.048
+Forward Wrapper,1.004,0.106,0.0111,153.2,71.38,128.9
+Backward Wrapper,0.980,0.107,0.0110,265.9,135.5,99.60
+Embedded,0.978,0.109,0.0135,0.531,11.89,2.572
+Ensemble,0.965,0.111,0.0134,11.74,13.26,3.533
+Baseline LightGBM,0.980,0.105,0.0120,0.556,6.309,0.591
+HEFS (K=2),0.956,0.103,0.0110,2.478,10.56,2.238
+HEFS (K=3),0.977,0.111,0.0153,3.779,5.453,1.263
+HEFS (Ablation),0.962,0.106,0.0122,4.231,11.16,1.407
+
