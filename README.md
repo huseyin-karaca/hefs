@@ -110,7 +110,7 @@ python -m mkdocs build --strict
 python -m mkdocs serve
 ```
 
-The configured website address is [hkaraca.com/hefs](https://hkaraca.com/hefs/). The GitHub repository retains its published name, `hierarchical-feature-selection`. Serve the generated `site/` directory at `/hefs/` on the domain; building locally does not publish the site. The included GitHub Actions workflow validates the example and build, then uploads the static files as a workflow artifact.
+The configured website address is [hkaraca.com/hefs](https://hkaraca.com/hefs/). The source repository is [huseyin-karaca/hefs](https://github.com/huseyin-karaca/hefs). Serve the generated `site/` directory at `/hefs/` on the domain; building locally does not publish the site. The included GitHub Actions workflow validates the example and build, then uploads the static files as a workflow artifact.
 
 ## Citation
 
@@ -128,6 +128,6 @@ The configured website address is [hkaraca.com/hefs](https://hkaraca.com/hefs/).
 
 ## Contact and licensing
 
-For questions, [open an issue](https://github.com/huseyin-karaca/hierarchical-feature-selection/issues) or visit [hkaraca.com](https://hkaraca.com/).
+For questions, [open an issue](https://github.com/huseyin-karaca/hefs/issues) or visit [hkaraca.com](https://hkaraca.com/).
 
 No code license is currently included. The paper and third-party datasets retain their respective rights and terms; this README does not assign a license.
