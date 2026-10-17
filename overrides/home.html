@@ -1,4 +1,21 @@
 {% extends "main.html" %}
+{#- Google Scholar reads these Highwire Press tags on the paper's own page (https://scholar.google.com/intl/en/scholar/inclusion.html#indexing). -#}
+{% block extrahead %}
+  {{ super() }}
+  <meta name="citation_title" content="Hierarchical ensemble-based feature selection for time series prediction">
+  <meta name="citation_author" content="Huseyin Karaca">
+  <meta name="citation_author" content="Aysin Tumay">
+  <meta name="citation_author" content="Ali Taha Koc">
+  <meta name="citation_author" content="Suleyman Serdar Kozat">
+  <meta name="citation_journal_title" content="Digital Signal Processing">
+  <meta name="citation_publisher" content="Elsevier">
+  <meta name="citation_volume" content="168">
+  <meta name="citation_firstpage" content="105528">
+  <meta name="citation_publication_date" content="2026/01">
+  <meta name="citation_issn" content="1051-2004">
+  <meta name="citation_doi" content="10.1016/j.dsp.2025.105528">
+  <meta name="citation_abstract_html_url" content="https://hkaraca.com/hefs/">
+{% endblock %}
 {% block content %}{{ page.content }}{% endblock %}
 {% block tabs %}
 {{ super() }}
