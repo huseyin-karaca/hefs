@@ -146,7 +146,6 @@ def main():
         'docs/assets/results.svg': results(rows),
         'docs/snippets/errors.md': table(rows,'error'),
         'docs/snippets/times.md': table(rows,'seconds'),
-        'docs/assets/mark.svg': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#3355d6"/><path d="M8 9h7v6h9v8H8z" fill="none" stroke="white" stroke-width="2.5"/></svg>\n',
     }
     for name, content in outputs.items():
         path = ROOT/name

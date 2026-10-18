@@ -7,8 +7,8 @@ theme:
   name: material
   custom_dir: overrides
   font: false
-  logo: assets/mark.svg
-  favicon: assets/mark.svg
+  logo: assets/favicon.svg
+  favicon: assets/favicon.svg
   palette:
     scheme: default
     primary: custom
