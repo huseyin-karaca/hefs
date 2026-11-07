@@ -1,60 +1,99 @@
-"""Check the built site's local links, fragments, and image paths."""
+"""Dependency-free checks for the project page's local links, results and word budget."""
+import csv
+import html as html_lib
+import re
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
-import yaml
+import xml.etree.ElementTree as ET
 
-ROOT = Path(__file__).resolve().parents[1] / 'site'
-CONFIG = yaml.safe_load((ROOT.parent / 'mkdocs.yml').read_text())
-BASE_PATH = urlsplit(CONFIG['site_url']).path
+ROOT = Path(__file__).resolve().parents[1]
+DOCS = ROOT / 'docs'
 
 
 class Page(HTMLParser):
-    def __init__(self, path):
+    """Collects element IDs, local link targets, and the body rows of every table."""
+
+    def __init__(self):
         super().__init__()
-        self.path, self.ids, self.links = path, set(), []
-        self.feed(path.read_text())
+        self.ids, self.links, self.tables = set(), [], []
+        self.in_body, self.cell = False, None
+        self.row = []
 
-    def handle_starttag(self, tag, attrs):
-        attrs = dict(attrs)
-        if attrs.get('id'):
+    def handle_starttag(self, tag, attributes):
+        attrs = dict(attributes)
+        if 'id' in attrs:
+            assert attrs['id'] not in self.ids, f'Duplicate ID: {attrs["id"]}'
             self.ids.add(attrs['id'])
-        if tag in ('a', 'link', 'img', 'script'):
-            value = attrs.get('href') if tag in ('a', 'link') else attrs.get('src')
-            if value:
-                self.links.append(value)
+        for key in ('href', 'src'):
+            if key in attrs:
+                self.links.append(attrs[key])
+        if tag == 'tbody':
+            self.in_body = True
+            self.tables.append([])
+        if self.in_body and tag == 'tr':
+            self.row = []
+        if self.in_body and tag in ('th', 'td'):
+            self.cell = ''
+
+    def handle_data(self, data):
+        if self.cell is not None:
+            self.cell += data
+
+    def handle_endtag(self, tag):
+        if self.in_body and tag in ('th', 'td'):
+            self.row.append(self.cell.strip())
+            self.cell = None
+        if self.in_body and tag == 'tr':
+            self.tables[-1].append(self.row)
+        if tag == 'tbody':
+            self.in_body = False
 
 
-def main():
-    pages = {p.resolve(): Page(p) for p in ROOT.rglob('*.html')}
-    if not pages:
-        raise SystemExit('Build the site first: python -m mkdocs build --strict')
-    errors, checked = [], 0
-    for path, page in pages.items():
-        for link in page.links:
-            url = urlsplit(link)
-            if url.scheme or url.netloc:
-                continue
-            local_path = unquote(url.path)
-            if local_path.startswith(BASE_PATH):
-                local_path = local_path[len(BASE_PATH):]
-                target = ROOT / local_path
-            elif local_path.startswith('/'):
-                target = ROOT / local_path.lstrip('/')
-            else:
-                target = path.parent / local_path if local_path else path
-            target = target.resolve()
-            if target.is_dir():
-                target /= 'index.html'
-            checked += 1
-            if not target.exists():
-                errors.append(f'{path.relative_to(ROOT)}: missing {link}')
-            elif url.fragment and target in pages and unquote(url.fragment) not in pages[target].ids:
-                errors.append(f'{path.relative_to(ROOT)}: missing fragment {link}')
-    if errors:
-        raise SystemExit('\n'.join(errors))
-    print(f'Checked {checked} local references across {len(pages)} HTML pages; no broken links or fragments.')
+page = Page()
+page.feed((DOCS / 'index.html').read_text())
 
+for link in page.links:
+    parts = urlsplit(link)
+    if parts.scheme or parts.netloc:
+        continue
+    if parts.path:
+        path = (DOCS / unquote(parts.path)).resolve()
+        assert path.is_relative_to(DOCS), f'Link outside site: {link}'
+        assert path.is_file(), f'Missing asset: {link}'
+    elif parts.fragment:
+        assert parts.fragment in page.ids, f'Missing anchor: {link}'
 
-if __name__ == '__main__':
-    main()
+# Both tables on the page transcribe `paper_results.csv`: the first its error columns,
+# the second its timing columns, for the same six of the paper's nine models.
+with (DOCS / 'data/paper_results.csv').open() as stream:
+    published = {row['model']: row for row in csv.DictReader(stream)}
+assert len(published) == 9, f'Expected 9 models in paper_results.csv, found {len(published)}'
+assert len(page.tables) == 2, f'Expected 2 tables on the page, found {len(page.tables)}'
+
+NAMES = {'HEFS (Ablation)': 'HEFS (Ablation)', 'Baseline LightGBM': 'Baseline LightGBM'}
+checked = 0
+for table, keys in zip(page.tables, (('synthetic_error', 'm4_error', 'weather_error'),
+                                     ('synthetic_seconds', 'm4_seconds', 'weather_seconds'))):
+    assert len(table) == 6, f'Expected 6 rows, found {len(table)}'
+    for row in table:
+        model = NAMES.get(row[0], row[0])
+        assert model in published, f'Row not in paper_results.csv: {model}'
+        values = [float(published[model][key]) for key in keys]
+        assert values == [float(v) for v in row[1:]], f'Value mismatch on {model}'
+        checked += 1
+
+for svg in (DOCS / 'assets').glob('*.svg'):
+    ET.parse(svg)
+
+index = (DOCS / 'index.html').read_text()
+for claim in ('0.956', 'cost-optimization block', '10.1016/j.dsp.2025.105528'):
+    assert claim in index, f'Missing from page: {claim}'
+
+# The page must stay inside the project-page word budget (figures, tables and BibTeX excluded).
+visible = re.sub(r'(?s)<(head|script|style|svg|pre|table)\b.*?</\1>|<[^>]+>', ' ', index)
+words = len(html_lib.unescape(visible).split())
+assert words <= 500, f'Page has {words} visible words, budget is 500'
+
+print(f'OK: {len(page.links)} links, {len(page.ids)} IDs, {checked} result cells across '
+      f'{len(page.tables)} HTML/CSV table pairs, SVG syntax, {words} visible words.')

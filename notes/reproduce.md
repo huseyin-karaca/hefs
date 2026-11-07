@@ -1,6 +1,6 @@
 # Run HEFS
 
-<p class="lede">Try the two-layer estimator, explore the experiment setup, and find the datasets used in the paper.</p>
+<p>Try the two-layer estimator, explore the experiment setup, and find the datasets used in the paper.</p>
 
 ## Quickstart
 

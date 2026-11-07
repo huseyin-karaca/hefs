@@ -1,6 +1,6 @@
 # How HEFS works
 
-<p class="lede">Different feature groups contribute at different stages: first a prediction, then a learned relative adjustment.</p>
+<p>Different feature groups contribute at different stages: first a prediction, then a learned relative adjustment.</p>
 
 ## 1. Assign feature groups
 
@@ -14,36 +14,35 @@ For a forecasting task, the first group might contain target lags and rolling st
 
 Train a base model on the dominant group to predict the target. In the supplied two-layer model this is a LightGBM regressor. Feature and target min-max scaling are optional and fitted on the training data.
 
-<div class="equation">initial prediction = f₁(dominant features)</div>
+> `initial prediction = f₁(dominant features)`
 
 ## 3. Turn useful corrections into training targets
 
 The cost-optimization block searches over relative adjustments to the first prediction. For a correction `a`, the adjusted prediction is `(1 + a) × initial prediction`.
 
-<div class="equation">a* = argmin over a ∈ [−β, β] of loss(y, (1 + a) × initial prediction)</div>
+> `a* = argmin over a ∈ [−β, β] of loss(y, (1 + a) × initial prediction)`
 
 The paper describes a general loss-based search. The implementation evaluates a finite grid using absolute error. Because the search evaluates the loss directly, it does not need a gradient of that loss. This property concerns the correction search; the base learners retain their own training objectives.
 
 The second model receives both the complementary features and the first model’s prediction. Its regression target is the correction found by the search, rather than the original target or an additive residual.
 
-<figure markdown>
 ![Training flow: observed training targets and first-stage predictions define correction targets; the second stage learns those targets using complementary features and first-stage predictions.](assets/training.svg)
-<figcaption>Training only: observed targets help construct correction targets. The dashed connection is supervision, not an inference input.</figcaption>
-</figure>
 
-!!! note "Implementation detail: temporal alignment"
-    `models_hefs.py` constructs correction targets from one-position-rolled training targets and predictions (`np.roll`). The first position therefore wraps around to the last training observation. The three-layer implementation instead initializes its first correction target to zero. These details matter for exact replication; the diagrams explain the conceptual architecture. Keep samples in temporal order when using the estimator for time series.
+*Training only: observed targets help construct correction targets. The dashed connection is supervision, not an inference input.*
+
+> **Implementation detail: temporal alignment**
+>
+> `models_hefs.py` constructs correction targets from one-position-rolled training targets and predictions (`np.roll`). The first position therefore wraps around to the last training observation. The three-layer implementation instead initializes its first correction target to zero. These details matter for exact replication; the diagrams explain the conceptual architecture. Keep samples in temporal order when using the estimator for time series.
 
 ## 4. Predict without observed targets
 
 At inference, the first model predicts from its feature group. The second predicts a correction from the next group and the first prediction. The result is multiplied, then transformed back to the original target scale if target scaling was enabled.
 
-<div class="equation">final prediction = [1 + f₂(complementary features, initial prediction)] × initial prediction</div>
+> `final prediction = [1 + f₂(complementary features, initial prediction)] × initial prediction`
 
-<figure markdown>
 ![Inference flow with dominant features entering model one and complementary features plus the first prediction entering model two, followed by multiplicative combination.](assets/inference.svg)
-<figcaption>Inference: both models use input features and learned parameters. No target values or correction search are required.</figcaption>
-</figure>
+
+*Inference: both models use input features and learned parameters. No target values or correction search are required.*
 
 For illustration, if the initial prediction is `20` and the learned correction is `−0.1`, the refined prediction is `18`. This arithmetic example is not an experimental result. If target scaling is enabled, the multiplication happens in scaled target space.
 
@@ -57,5 +56,5 @@ The framework can repeat this process across more groups. The repository include
 
 HEFS is motivated by limited samples, many features, non-stationarity, and identifiable groups with unequal predictive strength. It may offer less benefit when abundant data allow a single model to use all informative features, or when no meaningful dominant/complementary grouping exists. Group assignment remains an important design choice rather than an automatically solved part of the estimator.
 
-[See the experimental evidence →](results.md)
+Next: [results.md](results.md).
 

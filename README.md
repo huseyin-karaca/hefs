@@ -4,14 +4,14 @@
 
 **Use dominant features to predict. Use complementary features to refine.**
 
-[Project website](https://hkaraca.com/hefs/) · [Paper / DOI](https://doi.org/10.1016/j.dsp.2025.105528) · [Method](docs/method.md) · [Results](docs/results.md) · [Reproduce](docs/reproduce.md) · [BibTeX](CITATION.bib)
+[Project website](https://hkaraca.com/hefs/) · [Paper / DOI](https://doi.org/10.1016/j.dsp.2025.105528) · [Method](notes/method.md) · [Results](notes/results.md) · [Reproduce](notes/reproduce.md) · [BibTeX](CITATION.bib)
 
 **Huseyin Karaca, Aysin Tumay, Ali Taha Koc, Suleyman Serdar Kozat**  
 Bilkent University · *Digital Signal Processing*, 168, 105528 (2026)  
 Available online August 2025
 
 <p align="center">
-  <img src="docs/assets/overview.svg" width="600" alt="HEFS: a first model predicts from dominant features; a second model learns a relative correction from complementary features and the first prediction; the two outputs combine multiplicatively.">
+  <img src="notes/assets/overview.svg" width="600" alt="HEFS: a first model predicts from dominant features; a second model learns a relative correction from complementary features and the first prediction; the two outputs combine multiplicatively.">
 </p>
 
 ## Why HEFS?
@@ -23,7 +23,7 @@ When samples are limited and features are numerous, a model can rely on a small 
 3. **Learn the correction:** train the next model on complementary features plus the preceding prediction, using the searched corrections as targets.
 4. **Refine:** at inference, apply the learned relative correction: `final = initial × (1 + correction)`.
 
-The repository provides two- and three-layer LightGBM implementations. HEFS organizes feature use across a hierarchy; it does not return a single selected feature subset. Features must be grouped and ordered before fitting. See [the method](docs/method.md) for the distinction between training and inference, correction alignment, and scaling.
+The repository provides two- and three-layer LightGBM implementations. HEFS organizes feature use across a hierarchy; it does not return a single selected feature subset. Features must be grouped and ordered before fitting. See [the method](notes/method.md) for the distinction between training and inference, correction alignment, and scaling.
 
 ## Published results
 
@@ -41,7 +41,7 @@ The two-layer model has the lowest displayed test error on Synthetic and M4 and 
 
 **Metric note:** the paper captions Table 3 “Test MSE,” while its prose and evaluation protocol describe MAE. The scripts use MAE for search and result aggregation. The values above are reproduced as published and labeled “reported test error” pending verification against the original per-run results. They are not results from a new run.
 
-Three layers do not consistently improve generalization. Differences are not statistically significant for every comparison, and benefits may diminish with abundant data or unclear feature-group structure. [Full tables, timing details, significance, and limitations →](docs/results.md)
+Three layers do not consistently improve generalization. Differences are not statistically significant for every comparison, and benefits may diminish with abundant data or unclear feature-group structure. [Full tables, timing details, significance, and limitations →](notes/results.md)
 
 ## Quickstart
 
@@ -75,7 +75,7 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 ```
 
-Keep temporal order for time-series inputs. Fit any ranking or grouping procedure on training data only and preserve the same column ordering at prediction time. The two-layer model uses the first `p + q` columns by position; it does not rank features itself. Its correction targets use a one-position circular shift during training; see [implementation notes](docs/method.md).
+Keep temporal order for time-series inputs. Fit any ranking or grouping procedure on training data only and preserve the same column ordering at prediction time. The two-layer model uses the first `p + q` columns by position; it does not rank features itself. Its correction targets use a one-position circular shift during training; see [implementation notes](notes/method.md).
 
 ## Repository guide
 
@@ -88,29 +88,39 @@ Keep temporal order for time-series inputs. Fit any ranking or grouping procedur
 | `den_synt0.py`, `den_m4n.py`, `den_weather.py` | Original experiment scripts |
 | `hus_helper.py`, `load_weather2.py` | Data loading, feature engineering, and evaluation |
 | `examples/quickstart.py` | Standalone generated-data example |
-| `docs/`, `overrides/`, `mkdocs.yml` | Static project website |
+| `docs/` | The project page: one static `index.html`, its favicons and the transcribed results CSV |
+| `notes/` | Method, results and reproduction notes, with the diagrams they reference |
 | `docs/data/paper_results.csv` | Published Table 3 and Table 6 values |
-| `tools/site_assets.py` | Regenerate SVG figures and full result tables |
 | `CITATION.bib` | Paper citation |
 
 ## Reproducing the paper
 
 The experiment scripts cover Synthetic, M4, and Weather, with dataset construction, model comparisons, hyperparameter search, and evaluation. The standalone quickstart provides a small example of the two-layer estimator on generated data.
 
-See [the reproduction guide](docs/reproduce.md) for dataset sources, experiment settings, dependencies, and the model API.
+See [the reproduction guide](notes/reproduce.md) for dataset sources, experiment settings, dependencies, and the model API.
 
 ## Project website
 
-The site uses Material for MkDocs, with styling aligned to [HiT-ASR](https://hkaraca.com/hit-asr/). Use Python 3.12 for the pinned documentation environment. To build and preview it:
+`docs/index.html` is the whole site: one static file, no build step. Preview it with
 
 ```bash
-python -m pip install -r requirements-docs.txt
-python tools/site_assets.py
-python -m mkdocs build --strict
-python -m mkdocs serve
+python3 -m http.server 8000 --directory docs
 ```
 
-The configured website address is [hkaraca.com/hefs](https://hkaraca.com/hefs/). The source repository is [huseyin-karaca/hefs](https://github.com/huseyin-karaca/hefs). Serve the generated `site/` directory at `/hefs/` on the domain; building locally does not publish the site. The included GitHub Actions workflow validates the example and build, then uploads the static files as a workflow artifact.
+and check it with `python tools/check_site.py`, which verifies that the result
+tables match `docs/data/paper_results.csv`, that local links resolve, that the
+SVGs parse, and that the page stays within its 500-word budget.
+
+The page follows the `paper-project-page` house template that every project and
+publication page under `hkaraca.com` shares unchanged: no navigation bar, at
+most six sections, at most four figures and tables, and the abstract as the only
+long text. The detail that used to fill `method.md`, `results.md` and
+`reproduce.md` now lives in `notes/`, and is not published.
+
+The site is served at [hkaraca.com/hefs](https://hkaraca.com/hefs/): the
+`Deploy site` workflow in
+[huseyin-karaca.github.io](https://github.com/huseyin-karaca/huseyin-karaca.github.io)
+checks this repository out and copies `docs/` into the published tree.
 
 ## Citation
 
