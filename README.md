@@ -107,20 +107,21 @@ See [the reproduction guide](notes/reproduce.md) for dataset sources, experiment
 python3 -m http.server 8000 --directory docs
 ```
 
-and check it with `python tools/check_site.py`, which verifies that the result
-tables match `docs/data/paper_results.csv`, that local links resolve, that the
-SVGs parse, and that the page stays within its 500-word budget.
-
 The page follows the `paper-project-page` house template that every project and
 publication page under `hkaraca.com` shares unchanged: no navigation bar, at
 most six sections, at most four figures and tables, and the abstract as the only
 long text. The detail that used to fill `method.md`, `results.md` and
 `reproduce.md` now lives in `notes/`, and is not published.
 
-The site is served at [hkaraca.com/hefs](https://hkaraca.com/hefs/): the
-`Deploy site` workflow in
-[huseyin-karaca.github.io](https://github.com/huseyin-karaca/huseyin-karaca.github.io)
-checks this repository out and copies `docs/` into the published tree.
+The site is served at [hkaraca.com/hefs](https://hkaraca.com/hefs/) directly from
+this repository. GitHub Pages is configured to deploy from the `main` branch's
+`/docs` folder. Every push that changes `docs/` automatically publishes the page;
+check the **pages build and deployment** run in Actions for its status.
+
+The project inherits `hkaraca.com` from the account's main website. Keep the
+custom-domain field empty in this repository and keep `docs/.nojekyll` so the
+static files are published unchanged. No copying or deployment in
+`huseyin-karaca.github.io` is required.
 
 ## Citation
 
