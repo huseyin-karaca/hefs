@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HEFS: Hierarchical ensemble-based feature selection for time series prediction</title>
+<title>Hierarchical ensemble-based feature selection for time series prediction</title>
 <meta name="description" content="HEFS gives feature groups distinct roles: a first predictor on the dominant features, then a learned multiplicative correction from the complementary ones. Lowest reported test error on Synthetic and M4.">
 <link rel="canonical" href="https://hkaraca.com/hefs/">
-<meta property="og:title" content="HEFS: Hierarchical ensemble-based feature selection for time series prediction">
+<meta property="og:title" content="Hierarchical ensemble-based feature selection for time series prediction">
 <meta property="og:description" content="A cost-optimization block turns the correction that minimises the final loss into the next layer's training target.">
-<meta property="og:image" content="https://hkaraca.com/hefs/assets/teaser.png">
+<meta property="og:image" content="https://hkaraca.com/hefs/assets/forecast-hero.png">
 <meta name="citation_title" content="Hierarchical ensemble-based feature selection for time series prediction">
 <meta name="citation_author" content="Karaca, Huseyin">
 <meta name="citation_author" content="Tumay, Aysin">
@@ -24,107 +24,46 @@
 :root{--bg:#fff;--ink:#1c2230;--ink2:#434a5a;--muted:#6b7180;--faint:#9ba1ad;--line:#c9ccd3;--wash:#f6f7f9;--accent:#3355d6;--tint:#eef1fc;--on-accent:#fff}
 @media (prefers-color-scheme:dark){:root{--bg:#171a21;--ink:#e7e9ee;--ink2:#c2c7d1;--muted:#9aa0ad;--faint:#6d7484;--line:#3b414d;--wash:#1c2028;--accent:#5b78ee;--tint:#232c4d;--on-accent:#fff}}
 *{box-sizing:border-box}
+main{text-align:center}
+pre{text-align:left}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
 main{max-width:760px;margin:0 auto;padding:56px 20px 80px}
 header{text-align:center;margin-bottom:32px}
 .venue{color:var(--muted);font-size:14px;margin:0 0 8px}
-h1{font-size:40px;line-height:1.1;margin:0}
+h1{font-size:34px;line-height:1.15;margin:0 0 16px}
 .title{font-size:20px;color:var(--ink2);margin:6px 0 16px}
 .authors{margin:0}.affil{color:var(--muted);margin:0 0 20px}
-.links a{display:inline-block;margin:4px;padding:6px 16px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none}
+.links a{display:inline-flex;align-items:center;gap:8px;margin:4px;padding:6px 16px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none}
 .links a:hover{border-color:var(--ink)}
 h2{font-size:24px;margin:48px 0 12px}h3{font-size:18px;margin:28px 0 8px}
 a{color:var(--accent)}
-figure{margin:20px 0}figure svg,figure img{width:100%;height:auto;display:block}
+figure{margin:20px 0}figure img{width:100%;height:auto;display:block}
+figure.hero img{background:#fff;border-radius:8px}
 figcaption{color:var(--muted);font-size:15px;margin-top:8px}
 table{width:100%;border-collapse:collapse;font-size:15px;font-variant-numeric:tabular-nums}
 th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}
 tr.ours td{font-weight:600;background:var(--tint)}
-.tall{display:none}@media (max-width:600px){.wide{display:none}.tall{display:block}}
-audio{width:100%;height:36px}
+.bib{position:relative}.bib button{position:absolute;top:8px;right:8px}
 pre{background:var(--wash);padding:16px;overflow-x:auto;font-size:13px;border-radius:6px}
 button{font:inherit;font-size:14px;padding:4px 12px;border:1px solid var(--line);border-radius:6px;background:none;color:var(--ink);cursor:pointer}
-footer{color:var(--muted);font-size:14px;text-align:center;margin-top:64px}
-.f-ink{fill:var(--ink)}.s-ink{stroke:var(--ink)}.f-ink2{fill:var(--ink2)}.s-ink2{stroke:var(--ink2)}
-.f-muted{fill:var(--muted)}.s-muted{stroke:var(--muted)}.f-faint{fill:var(--faint)}.s-faint{stroke:var(--faint)}
-.f-line{fill:var(--line)}.s-line{stroke:var(--line)}.f-bg{fill:var(--bg)}.s-bg{stroke:var(--bg)}
-.f-accent{fill:var(--accent)}.s-accent{stroke:var(--accent)}.f-tint{fill:var(--tint)}.f-on-accent{fill:var(--on-accent)}
 </style>
 </head>
 <body><main>
 <header>
   <p class="venue">Digital Signal Processing · 2026</p>
-  <h1>HEFS</h1>
-  <p class="title">Hierarchical ensemble-based feature selection for time series prediction</p>
+  <h1>Hierarchical ensemble-based feature selection for time series prediction</h1>
   <p class="authors"><a href="https://hkaraca.com/">Huseyin Karaca</a>, Aysin Tumay, Ali Taha Koc, Suleyman Serdar Kozat</p>
   <p class="affil">Bilkent University</p>
-  <p class="links"><a href="https://doi.org/10.1016/j.dsp.2025.105528">Paper</a><a href="https://github.com/huseyin-karaca/hefs">Code</a></p>
+  <p class="links"><a href="https://doi.org/10.1016/j.dsp.2025.105528"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Paper</a><a href="https://hkaraca.com/assets/pdf/grc26-presentation.pdf"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v4M8 20h8"/></svg>Slides</a><a href="https://github.com/huseyin-karaca/hefs"><svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Code</a></p>
 </header>
 
-<figure><svg viewBox="0 0 560 450" role="img" aria-label="The dominant feature group trains a first LightGBM predictor. During training a cost-optimization block searches for the relative correction to that prediction which minimises the final loss, and uses it as the target of a second LightGBM fitted on the complementary features together with the first prediction. At inference the final prediction is one plus the predicted correction, times the first prediction.">
-<rect x="20" y="14" width="250" height="48" rx="6" class="f-tint s-accent"/>
-<rect x="290" y="14" width="250" height="48" rx="6" class="f-bg s-line"/>
-<text x="38" y="44" class="f-accent" font-size="18" font-weight="600">Dominant features</text>
-<text x="308" y="44" class="f-ink" font-size="18">Complementary features</text>
-<path d="M145 62V88" class="s-accent" fill="none" stroke-width="2"/><path d="M139 82l6 8 6-8" class="s-accent" fill="none" stroke-width="2"/>
-<path d="M415 62V236" class="s-line" fill="none" stroke-width="2"/><path d="M409 230l6 8 6-8" class="s-line" fill="none" stroke-width="2"/>
-<rect x="20" y="94" width="250" height="48" rx="6" class="f-bg s-line"/>
-<text x="38" y="124" class="f-ink" font-size="18">Layer 1 — LightGBM</text>
-<path d="M145 142V168" class="s-accent" fill="none" stroke-width="2"/><path d="M139 162l6 8 6-8" class="s-accent" fill="none" stroke-width="2"/>
-<rect x="20" y="174" width="250" height="48" rx="6" class="f-tint s-accent"/>
-<text x="38" y="204" class="f-accent" font-size="18" font-weight="600">initial prediction</text>
-<path d="M145 222V248" class="s-accent" fill="none" stroke-width="2"/><path d="M139 242l6 8 6-8" class="s-accent" fill="none" stroke-width="2"/>
-<rect x="20" y="254" width="520" height="66" rx="6" class="f-bg s-line"/>
-<text x="38" y="283" class="f-ink" font-size="19">Layer 2 — LightGBM predicts a correction</text>
-<text x="38" y="309" class="f-muted" font-size="18">target: the correction that minimises the final loss</text>
-<path d="M280 324V350" class="s-accent" fill="none" stroke-width="2"/><path d="M274 344l6 8 6-8" class="s-accent" fill="none" stroke-width="2"/>
-<rect x="20" y="356" width="520" height="48" rx="6" class="f-tint s-accent"/>
-<text x="38" y="386" class="f-accent" font-size="19" font-weight="600">final = (1 + correction) × initial prediction</text>
-<text x="20" y="438" class="f-muted" font-size="18">the correction search runs in training only</text>
-</svg><figcaption>The second layer does not re-predict the target: it learns how much the first prediction should move.</figcaption></figure>
+<figure class="hero"><img src="assets/forecast-hero.svg" width="340" height="283" alt="HEFS schematic. Features are sorted by importance and split into a dominant and a non-dominant group. A LightGBM base model, fitted on the dominant group with target y, makes a first forecast. During training only, a cost-optimization block takes the observed target y and the first forecast and finds, for each sample, the scale alpha (between minus beta and beta) for which one plus alpha times the first forecast has the lowest loss; these alpha values are the regression target of a second LightGBM, whose inputs are the non-dominant group and the first forecast. The final forecast is the first forecast times one plus the predicted correction. Below, the corrected forecast follows events in the actual series that the base forecast misses."><figcaption>A base model forecasts from the dominant features; a second layer, whose inputs are the non-dominant features and that forecast and whose training target is the cost-optimized scale α, rescales it.</figcaption></figure>
 
 <h2>Abstract</h2>
 <p>We introduce a hierarchical ensemble-based feature selection (HEFS) method specifically designed for high-dimensional, non-stationary time series prediction tasks. Traditional methods typically select a single dominant subset of features, potentially neglecting valuable information from non-selected subsets. In contrast, our approach employs a multi-layer hierarchical structure, where dominant features are initially used to train the first layer, and non-dominant features are sequentially processed in subsequent layers. A novel cost-optimization block bridges each layer, recalibrating the predictions of the previous layer by directly minimizing the final loss. Thus, effectively capturing interactions across feature groups in different layers and overcoming some of the limitations of classical gradient boosting-based ensembles. Extensive experiments on synthetic and real-world datasets demonstrate that our method significantly outperforms classical approaches in predictive accuracy and robustness against overfitting. To promote transparency and reproducibility, we publicly share our implementation code.</p>
 
-<h2 id="method">Method</h2>
-<p>The cost-optimization block searches a grid of relative corrections <em>a</em> and keeps the one that minimises the final loss, so it needs no gradient of that loss and the base learners keep their own objectives. That correction, not the target and not an additive residual, is what the second layer regresses on the complementary features and the first prediction. Three layers did not improve on two in the paper's experiments, and the grouping is supplied by the user rather than discovered.</p>
-
-<h2 id="results">Results</h2>
-
-<h3>Lowest reported test error on Synthetic and M4, tied on Weather</h3>
-<figure>
-<table>
-<thead><tr><th>Model</th><th>Synthetic</th><th>M4</th><th>Weather</th></tr></thead>
-<tbody>
-<tr><td>Baseline LightGBM</td><td>0.980</td><td>0.105</td><td>0.0120</td></tr>
-<tr><td>Filter</td><td>1.023</td><td>0.105</td><td>0.0123</td></tr>
-<tr><td>Forward Wrapper</td><td>1.004</td><td>0.106</td><td>0.0111</td></tr>
-<tr><td>Backward Wrapper</td><td>0.980</td><td>0.107</td><td>0.0110</td></tr>
-<tr><td>HEFS (Ablation)</td><td>0.962</td><td>0.106</td><td>0.0122</td></tr>
-<tr class="ours"><td>HEFS (K=2)</td><td>0.956</td><td>0.103</td><td>0.0110</td></tr>
-</tbody>
-</table>
-<figcaption>Table 3. Reported test error over 30 seeds on 300, 400 and 300 samples. The ablation replaces the multiplicative correction with an additive residual; Table 5 reports that difference as significant on Weather (p = 0.0009) but not on Synthetic (p = 0.1710) or M4 (p = 0.0644).</figcaption>
-</figure>
-
-<h3>Matches backward selection on Weather at a forty-fourth of the fit time</h3>
-<figure>
-<table>
-<thead><tr><th>Model</th><th>Synthetic</th><th>M4</th><th>Weather</th></tr></thead>
-<tbody>
-<tr><td>Baseline LightGBM</td><td>0.556</td><td>6.309</td><td>0.591</td></tr>
-<tr><td>Filter</td><td>0.316</td><td>1.763</td><td>6.048</td></tr>
-<tr><td>Forward Wrapper</td><td>153.2</td><td>71.38</td><td>128.9</td></tr>
-<tr><td>Backward Wrapper</td><td>265.9</td><td>135.5</td><td>99.60</td></tr>
-<tr><td>HEFS (Ablation)</td><td>4.231</td><td>11.16</td><td>1.407</td></tr>
-<tr class="ours"><td>HEFS (K=2)</td><td>2.478</td><td>10.56</td><td>2.238</td></tr>
-</tbody>
-</table>
-<figcaption>Table 6. Mean fit time in seconds on a 14-inch M3 MacBook Pro, not total search time. On Weather, HEFS reaches the same test error as backward selection in 2.238 s against 99.60 s.</figcaption>
-</figure>
-
 <h2 id="citation">BibTeX</h2>
-<pre id="bib">@article{karaca2026hefs,
+<div class="bib"><button onclick="navigator.clipboard.writeText(document.getElementById('bib').textContent)">Copy</button><pre id="bib">@article{karaca2026hefs,
   title   = {Hierarchical ensemble-based feature selection for
              time series prediction},
   author  = {Karaca, Huseyin and Tumay, Aysin and Koc, Ali Taha
@@ -134,8 +73,6 @@ footer{color:var(--muted);font-size:14px;text-align:center;margin-top:64px}
   pages   = {105528},
   year    = {2026},
   doi     = {10.1016/j.dsp.2025.105528}
-}</pre>
-<button onclick="navigator.clipboard.writeText(document.getElementById('bib').textContent)">Copy</button>
-<footer><a href="https://hkaraca.com/">Huseyin Karaca</a></footer>
+}</pre></div>
 </main></body>
 </html>
