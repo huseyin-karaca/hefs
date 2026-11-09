@@ -1,28 +1,55 @@
-# Hierarchical ensemble-based feature selection for time series prediction
+<div align="center">
 
-HEFS predicts from dominant features, then learns a multiplicative correction from complementary features. This repository provides two- and three-layer LightGBM implementations.
+<h1>HEFS: Hierarchical ensemble-based feature selection for time series prediction</h1>
 
-**Huseyin Karaca, Aysin Tumay, Ali Taha Koc, Suleyman Serdar Kozat**
+**Digital Signal Processing · 2026**
 
-Bilkent University · *Digital Signal Processing*, 168, 105528 (2026)
+[Huseyin Karaca](https://hkaraca.com/), Aysin Tumay, Ali Taha Koc, Suleyman Serdar Kozat<br>
+Bilkent University
 
-[Project website](https://hkaraca.com/hefs/) · [Paper](https://doi.org/10.1016/j.dsp.2025.105528) · [Slides](https://hkaraca.com/assets/pdf/grc26-presentation.pdf) · [BibTeX](CITATION.bib)
+[[Paper](https://doi.org/10.1016/j.dsp.2025.105528)] [[Project page](https://hkaraca.com/hefs/)] [[Slides](https://hkaraca.com/assets/pdf/grc26-presentation.pdf)]
 
-<p align="center">
-  <img src="docs/assets/forecast-hero.svg" width="600" alt="A base model predicts from dominant features; a second model uses complementary features to refine the forecast.">
-</p>
+</div>
 
-## Quickstart
+HEFS is a hierarchical feature selection method for high-dimensional, non-stationary time series prediction. A first layer forecasts from the dominant features. Each next layer uses the remaining features to learn a cost-optimized scale that corrects the previous forecast. This is the official implementation of the *Digital Signal Processing* (2026) paper, with two- and three-layer LightGBM estimators.
+
+<p align="center"><img src="docs/assets/forecast-hero.png" width="600" alt="A base model forecasts from dominant features; a second layer rescales the forecast using complementary features."></p>
+<p align="center"><em>The second layer takes the non-dominant features and the first forecast, and learns the scale α that rescales it.</em></p>
+
+## Quick start
 
 Python 3.10+. Run from the repository root:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python code/quickstart.py
+git clone https://github.com/huseyin-karaca/hefs.git && cd hefs
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python code/quickstart.py    # prints HEFS and LightGBM test MAE on generated data
 ```
 
-On Windows, activate with `.venv\Scripts\activate`.
+## Use on your own data
 
-The example generates its own data and prints HEFS and LightGBM prediction errors.
+Order the columns of `X` so the dominant features come first. The estimator follows the scikit-learn API.
+
+```python
+import sys; sys.path.insert(0, "code")
+from models_hefs import HierarchicalLightGBMRegressor
+
+model = HierarchicalLightGBMRegressor(feat_split=(p, q))   # p dominant, q complementary features
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+```
+
+## Citation
+
+```bibtex
+@article{karaca2026hefs,
+  title   = {Hierarchical ensemble-based feature selection for time series prediction},
+  author  = {Karaca, Huseyin and Tumay, Aysin and Koc, Ali Taha and Kozat, Suleyman Serdar},
+  journal = {Digital Signal Processing},
+  volume  = {168},
+  pages   = {105528},
+  year    = {2026},
+  doi     = {10.1016/j.dsp.2025.105528}
+}
+```
