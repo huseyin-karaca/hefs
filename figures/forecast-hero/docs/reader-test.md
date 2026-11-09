@@ -1,0 +1,4 @@
+# Reader test (own cold read of the 360 px thumbnail, revision 3)
+Cold reading: features are sorted by importance and split into a dominant and a non-dominant group of open-ended size. The dominant group feeds a base model (the larger tree ensemble) whose output ŷ1 is trained against y. The second-layer model takes the non-dominant group concatenated with ŷ1, outputs a correction α̂ and is trained against α⋆, which a dashed "Cost-optimization block" computes from ŷ1 during training. × combines 1 + α̂ with ŷ1 into the corrected forecast (orange), which the plot shows closer to the observed series than the dashed base forecast, but not identical. The bottom legend explains both the curves and the two arrow styles.
+Conveyed: all brief ideas. Not implied: measured performance, α⋆ observed, a perfect forecast.
+Weak point: y has no arrow into the block; the reader learns that y enters it from the block's equation, ℓ(y, …).
